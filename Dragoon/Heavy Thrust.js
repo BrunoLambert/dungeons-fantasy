@@ -1,0 +1,1 @@
+return { damageRoll: `${args[0].damageTotal}`, flavor: `Heavy Thrust` };
