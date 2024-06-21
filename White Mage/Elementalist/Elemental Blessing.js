@@ -10,14 +10,14 @@ try {
         "The weapon's damage rolls deal bonus damage equal to your proficiency bonus."
     ];
 
-    const confession = actor.items.find(i => i.name === 'Confession');
+    const confession = actor.items.find(i => i.name === 'Secret of the Lily');
     if (!confession) {
-        throw new Error('You dont have a Confession Feature');
+        throw new Error('You dont have a Secret of the Lily Feature');
     }
 
     const uses = confession.system.uses.value;
     if (!uses) {
-        throw new Error('No charges on Confession to use');
+        throw new Error('No charges of Lily to use');
     }
 
     let buttons = new Array(uses).fill({
@@ -34,7 +34,7 @@ try {
     const handleButtonCallback = (charges) => {
         const uuid = target.actor.uuid;
         const mod = item.actor.system.abilities.wis.mod || 1;
-        const chargeEffectArray = new Array(charges).fill('t');
+        const casterProf = item.actor.system.attributes.prof;
         let copy_item = duplicate(targetItem.toObject(false));
 
         const checkAndApplyEffect = async (effect) => {
@@ -55,14 +55,13 @@ try {
                 "system.properties.mgc": copy_item.system.properties.mgc,
                 "name": copy_item.name
             }).then(() => {
-                const damageTypePosition = copy_item.system.damage.parts[0].length;
                 copy_item.system.damage.parts[0][1] = type;
                 if (charges >= 2) {
                     copy_item.system.attackBonus = 1;
                     checkAndApplyEffect(CONVENIENT_EFFECTS[1]);
                 }
                 if (charges >= 3) {
-                    copy_item.system.damage.parts[0][0] = copy_item.system.damage.parts[0][0] + " + @prof";
+                    copy_item.system.damage.parts[0][0] = copy_item.system.damage.parts[0][0] + ` + ${casterProf}`;
                     checkAndApplyEffect(CONVENIENT_EFFECTS[2]);
                 }
 
@@ -77,7 +76,7 @@ try {
 
         let elementDamageDialog = new Dialog({
             title: "Elemental Blessing",
-            content: `<p>Select the element for the selected weapon:</p>`,
+            content: `<p>Select the elemento for the selected weapon:</p>`,
             buttons: {
                 cold: {
                     label: "Cold",
@@ -113,7 +112,7 @@ try {
 
     let confessionChargeDialog = new Dialog({
         title: "Elemental Blessing",
-        content: `<p>Select how many charges you want to spend</p>
+        content: `<p>Select how many charges of Lily you want to use</p>
          <p><ol>
              ${htmlEffects}
          </ol></p>`,
