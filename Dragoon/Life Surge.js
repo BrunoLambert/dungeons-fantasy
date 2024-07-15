@@ -25,9 +25,9 @@ if (rollData.attackD20 && rollData.attackRoll && rollData.hitTargets.length + ro
         speaker: speaker,
         content: `
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img width="36px" src="worlds/fantasy-dungeons/itens/Role%20Actions/Bloodbath.png" title="Bloodbath" />
+                <img width="36px" src="worlds/fantasy-dungeons/itens/Features%20and%20Spells/Lancet.png" title="Life Surge" />
                 <h3 style="font-family: Modesto Condensed, Palatino Linotype, serif; flex: 1; border-bottom: unset;">
-                    <div style="display:flex; align-items:center;">Bloodbath</div>
+                    <div style="display:flex; align-items:center;">Life Surge</div>
                 </h3>
             </div>
             <p style="font-size:12px; text-align:center; margin-bottom:0;">Healing</p>
