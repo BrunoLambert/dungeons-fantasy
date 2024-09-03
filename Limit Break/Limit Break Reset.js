@@ -6,10 +6,10 @@ characters.forEach(character => {
     character.update({ 'system.resources.tertiary.value': 0 });
 });
 
-const borunActor = game.actors.find(actor => actor.id === 'qTobemlO2cxXi1HE');
+const tataruActor = game.actors.find(actor => actor.id === 'ylVFkMeFBZIxoLTt');
 
 ChatMessage.create({
     user: null,
-    speaker: ChatMessage.getSpeaker({ actor: borunActor }),
+    speaker: ChatMessage.getSpeaker({ actor: tataruActor }),
     content: `<p>All Limit Break Points were lost.</p>`
 });

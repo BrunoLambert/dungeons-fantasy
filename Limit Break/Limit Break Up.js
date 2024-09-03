@@ -11,14 +11,14 @@ characters.forEach(character => {
     character.update({ 'system.resources.tertiary.value': finalLBValue });
 });
 
-const borunActor  = game.actors.find(actor => actor.id === 'qTobemlO2cxXi1HE');
+const tataruActor  = game.actors.find(actor => actor.id === 'ylVFkMeFBZIxoLTt');
 
 if (finalLBValue === 3 || finalLBValue === 6) {
     AudioHelper.play({ src: "worlds/fantasy-dungeons/sounds/FFXIV_Limit_Break_Unlocked.mp3", volume: 1, autoplay: true, loop: false }, true);
     
     ChatMessage.create({
         user: null,
-        speaker: ChatMessage.getSpeaker({ actor: borunActor }),
+        speaker: ChatMessage.getSpeaker({ actor: tataruActor }),
         content: `<p>Our party Limit Break points increased by 1</p><p><b>Limit Break Stage ${Math.ceil(finalLBValue / 3)} available!</b>`
     });
    
@@ -27,13 +27,13 @@ if (finalLBValue === 3 || finalLBValue === 6) {
     
     ChatMessage.create({
         user: null,
-        speaker: ChatMessage.getSpeaker({ actor: borunActor }),
+        speaker: ChatMessage.getSpeaker({ actor: tataruActor }),
         content: `<p>Our party Limit Break points increased by 1</p><p><b>Limit Break Stage 3 available!!!</b>`
     });
 } else {
     ChatMessage.create({
         user: null,
-        speaker: ChatMessage.getSpeaker({ actor: borunActor }),
+        speaker: ChatMessage.getSpeaker({ actor: tataruActor }),
         content: `<p>Our party Limit Break points increased by 1</p><p><b>We have ${finalLBValue} Limit Break points.</b>`
     });
 }
