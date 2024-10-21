@@ -3,10 +3,10 @@ const onUseItem = async () => {
 
   const spawnKerachole = async (amountNoulith = 1) => {
     const effectData = game.dfreds.effectInterface.findEffectByName('Kerachole').data.toObject();
-    effectData.description = effectData.description.replace("1d4", `${amountNoulith}d4`);
+    effectData.description = effectData.description.replace("1d6", `${amountNoulith}d6`);
     effectData.changes = effectData.changes.map(change => {
       if (change.key !== "flags.midi-qol.DR.all") return change;
-      return { ...change, value: `${amountNoulith}d4` }
+      return { ...change, value: `${amountNoulith}d6` }
     })
 
     const prev = await game.canvas.tokens.ownedTokens.find((token) => token.name === 'Kerachole')
@@ -35,9 +35,9 @@ const onUseItem = async () => {
     Hotbar.toggleDocumentSheet(actor.uuid)
   }
 
-  const intMod = Math.max(item.actor.system.abilities.int.mod, 1);
+  const noulithsToSend = Math.max(Math.min(item.actor.system.abilities.int.mod, 4), 1);
   let selects = ""
-  for (let i = 0; i < intMod; i++) {
+  for (let i = 0; i < noulithsToSend; i++) {
     selects += `<option value=${i + 1}>${i + 1} drones</option>`
   }
   let keracholeDialog = new Dialog({
@@ -46,7 +46,7 @@ const onUseItem = async () => {
       <p><b>Choose how many Nouliths you want to deploy</b></p>
       <select name="kerachole_charges" style="width: 100%;">
         ${selects}
-      </select><br/>`,
+      </select><br/><br/>`,
     buttons: {
       "Ok": {
         label: "Next",
@@ -136,7 +136,7 @@ const onReacall = async () => {
       <p><b>Choose how many Nouliths you want to recall</b></p>
       <select name="kerachole_charges" style="width: 100%;">
         ${selects}
-      </select><br/>`,
+      </select><br/><br/>`,
     buttons: {
       "Ok": {
         label: "Next",
