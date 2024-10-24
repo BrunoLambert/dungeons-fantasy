@@ -5,13 +5,33 @@ const onUseItem = async () => {
     throw new Error("You need valid targets.");
   }
 
+  const zoeNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith') && !!token.actor.getFlag('world', 'Zoe'));
+  zoeNoulithTokens.forEach(async (zoeNoulith) => {
+    await game.dfreds.effectInterface.removeEffect({ effectName: "Zoe", uuid: zoeNoulith.actor.uuid });
+  })
+
   const effectData = game.dfreds.effectInterface.findEffectByName('Zoe').data.toObject();
   effectData.description = effectData.description.replace("%m", `+${intMod}`);
   const maxNoulithsToSend = Math.max(Math.min(intMod, 4), 1);
 
-  targets.filter((target) => (target.name === "Noulith")).toObject().slice(0, maxNoulithsToSend).forEach(target => {
+  const gridOffset = game.canvas.grid.w * 0.25;
+  const noulithToGoPositions = [
+    { x: token.x, y: token.y },
+    { x: token.x + gridOffset, y: token.y },
+    { x: token.x, y: token.y + gridOffset },
+    { x: token.x + gridOffset, y: token.y + gridOffset }
+  ]
+
+  targets.filter((target) => (target.name === "Noulith")).toObject().slice(0, maxNoulithsToSend).forEach(async (target, targetIndex) => {
     game.dfreds.effectInterface.addEffectWith({ effectData, uuid: target.actor.uuid });
     target.actor.setFlag('world', 'Zoe', true);
+    const movingToken = new Sequence()
+      .animation()
+      .on(target)
+      .moveTowards(noulithToGoPositions[targetIndex])
+      .moveSpeed(500)
+
+    await movingToken.play();
   })
 
   effectData.description = `Zoe Technique is amplifying the healing by ${intMod * targets.size}`
