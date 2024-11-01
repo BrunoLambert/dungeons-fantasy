@@ -45,7 +45,10 @@ const onHealing = () => {
   const rollData = args[0];
 
   const zoeNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith') && !!token.actor.getFlag('world', 'Zoe'));
-  if (zoeNoulithTokens.length < 1) return;
+  if (zoeNoulithTokens.length < 1) {
+    game.dfreds.effectInterface.removeEffect({ effectName: "Zoe", uuid: game.user.character.uuid });
+    return;
+  }
 
   if (rollData.item.type !== "spell" && rollData.item.system.actionType !== "heal") return;
 
