@@ -9,7 +9,8 @@ if (targets.first().name === "Kerachole") {
   const recallItem = keracholeTarget.actor.items.find(item => item.name === "Recall");
   recallItem.use();
 } else {
-  targets.filter((target) => (target.name === "Noulith")).forEach(async (target) => {
+  const nouliths = targets.filter((target) => (target.name === "Noulith"))
+  nouliths.forEach(async (target) => {
     const noulithHp = target.actor.system.attributes.hp.value;
 
     const [spawnedCreature] = await warpgate.spawnAt(characterToken.center, "Noulith", { token: { alpha: 0, elevation: 1 } });
@@ -28,12 +29,16 @@ if (targets.first().name === "Kerachole") {
     let token = canvas.tokens.placeables.find(t => t.id === spawnedCreature);
     token.actor.update({ "system.attributes.hp.value": noulithHp })
 
-    // Check for Zoe Nouliths
-    const zoeNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith') && !!token.actor.getFlag('world', 'Zoe'));
-    if (zoeNoulithTokens < 1) {
-      game.dfreds.effectInterface.removeEffect({ effectName: "Zoe", uuid: game.user.character.uuid });
-    }
-
     target.document.delete();
   })
+
+  // Check for Zoe Nouliths
+  setTimeout(() => {
+    const zoeNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith' && token.actor.getFlag('world', 'Zoe')));
+    if (zoeNoulithTokens.length < 1) {
+      game.dfreds.effectInterface.removeEffect({ effectName: "Zoe", uuid: game.user.character.uuid });
+      const charToken = game.canvas.tokens.placeables.find(token => token.actor.uuid === game.user.character.uuid)
+      tokenAttacher.detachElementFromToken(nouliths, charToken)
+    }
+  }, 2000);
 }

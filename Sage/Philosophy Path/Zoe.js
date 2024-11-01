@@ -14,7 +14,7 @@ const onUseItem = async () => {
   effectData.description = effectData.description.replace("%m", `+${intMod}`);
   const maxNoulithsToSend = Math.max(Math.min(intMod, 4), 1);
 
-  const gridOffset = game.canvas.grid.w * 0.25;
+  const gridOffset = game.canvas.grid.w * 0.4;
   const noulithToGoPositions = [
     { x: token.x, y: token.y },
     { x: token.x + gridOffset, y: token.y },
@@ -36,6 +36,9 @@ const onUseItem = async () => {
 
   effectData.description = `Zoe Technique is amplifying the healing by ${intMod * targets.size}`
   game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
+  setTimeout(() => {
+    tokenAttacher.attachElementsToToken(targets, token)
+  }, 2000);
 }
 
 const onHealing = () => {
@@ -44,11 +47,9 @@ const onHealing = () => {
   const zoeNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith') && !!token.actor.getFlag('world', 'Zoe'));
   if (zoeNoulithTokens.length < 1) return;
 
-  if (!['spell', 'feat'].includes(rollData.item.type) || rollData.item.system.actionType !== "heal") return;
+  if (rollData.item.type !== "spell" && rollData.item.system.actionType !== "heal") return;
 
-  const adicionalHealing = zoeNoulithTokens.length * actor.system.abilities.int.mod;
-
-  return { damageRoll: `${adicionalHealing}`, flavor: `Zoe` };
+  return { damageRoll: `${zoeNoulithTokens.length}d4`, flavor: `Zoe` };
 }
 
 const onEffectDeletion = async () => {
