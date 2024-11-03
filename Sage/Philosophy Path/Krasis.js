@@ -68,16 +68,6 @@ const onItemUse = () => {
 const onEffectCreation = () => {
   const onUpdateActor = (eventActor, eventData, eventOptions, eventUserId) => {
     if (actor.name === "Noulith") return;
-    console.log("-------------------------")
-    console.log("Actor")
-    console.log(eventActor)
-    console.log("Data")
-    console.log(eventData)
-    console.log("Options")
-    console.log(eventOptions)
-    console.log("User ID")
-    console.log(eventUserId)
-    console.log("-------------------------")
     if (actor.uuid !== eventActor.uuid) return;
     if (!eventData.system?.attributes?.hp?.value) return;
     if (!eventOptions.dhp || eventOptions.dhp < 0 && !eventOptions.damageItem && !eventOptions.damageItem.hpDamage > 0) return;
