@@ -10,4 +10,7 @@ effectData.changes = effectData.changes.map(change => ({
 }));
 effectData.description = effectData.description.replace('%h', hpIncrease);
 
-await game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
+const targets = game.user.targets;
+targets.forEach(target => {
+    game.dfreds.effectInterface.addEffectWith({ effectData, uuid: target.actor.uuid });
+})

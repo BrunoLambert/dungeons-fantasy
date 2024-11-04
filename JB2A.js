@@ -4403,6 +4403,13 @@ export async function jb2aFreeDatabase(prefix) {
                     '03': `${prefix}/JB2A_DnD5e/Library/Generic/Token_Stage/TokenStageRound02_03_Regular_Blue_400x400.webm`
                 }
             }
+        },
+        square: {
+            blue: {
+                '01': {
+                    '01': `${prefix}/JB2A_DnD5e/Library/Generic/Token_Stage/TokenStageSquare01_04_Regular_Blue_400x400.webm`
+                }
+            }
         }
     }
     freeDatabase.toll_the_dead = {
