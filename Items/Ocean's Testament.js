@@ -23,12 +23,24 @@ if (game.combat) {
 }
 
 const itemData = game.items.find(item => item.name === "Ray of Frost").toObject();
-itemData.name = `${itemData.name} (Summon Leviathan)`;
+itemData.name = `${itemData.name} (Leviathan Egi)`;
 await Item.create(itemData, { parent: actor });
 
 Hotbar.toggleDocumentSheet(actor.uuid)
 
-const onEffectDeletion = () => {
-    const item = actor.items.find((item) => item.name.search("(Summon Leviathan)") >= 0)
-    if (item) item.delete();
+const onEffectDeletion = async () => {
+    const leviathanToken = game.canvas.tokens.ownedTokens.find((token) => token.name === 'Leviathan Egi')
+    await new Sequence()
+        .wait(200)
+        .effect()
+        .file("jb2a.particle_burst.01.circle.bluepurple")
+        .atLocation(leviathanToken)
+        .scale(1)
+        .wait(1750)
+        .play();
+    leviathanToken.document.delete();
+
+
+    const cantrip = actor.items.find((item) => (item.name.search("Leviathan Egi") >= 0 && item.name.search("Ray of Frost") >= 0))
+    if (cantrip) cantrip.delete();
 }
