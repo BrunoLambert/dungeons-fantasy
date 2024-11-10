@@ -22,4 +22,13 @@ if (game.combat) {
     await game.combat.combatants.find(combatant => combatant.tokenId === spawnedCreature).update({ initiative: combatant.initiative - 0.001 });
 }
 
+const itemData = game.items.find(item => item.name === "Ray of Frost").toObject();
+itemData.name = `${itemData.name} (Summon Leviathan)`;
+await Item.create(itemData, { parent: actor });
+
 Hotbar.toggleDocumentSheet(actor.uuid)
+
+const onEffectDeletion = () => {
+    const item = actor.items.find((item) => item.name.search("(Summon Leviathan)") >= 0)
+    if (item) item.delete();
+}

@@ -1,5 +1,4 @@
 const findingTokens = canvas.tokens.ownedTokens.filter(token => token.document.name.toLowerCase().search(/ifrit|garuda|titan/gm) >= 0);
-console.log(findingTokens)
 const atherialCompanionToken = findingTokens[0]?.document;
 
 const source = token;
