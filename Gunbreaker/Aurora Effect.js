@@ -1,10 +1,5 @@
 // On Turn Starting
-
 let AURORA_DETAILS = actor.getFlag('world', 'Gunbreak:Aurora')
-console.log('------------------------')
-console.log(AURORA_DETAILS)
-console.log('------------------------')
-
 const boxStyle = `
     flex: 0 0 100%;
     position: relative;
@@ -36,8 +31,8 @@ const boxStyleFinal = `
     font-weight: bold;
     color: var(--attribute-bar-primary-color);
 `
-
-const healing = await new Roll(AURORA_DETAILS.healing).roll();
+const isMaxHealing = actor.flags["midi-qol"].max.damage.heal;
+const healing = await new Roll(AURORA_DETAILS.healing).evaluate({ maximize: isMaxHealing });
 actor.update({ 'system.attributes.hp.value': Math.min(actor.system.attributes.hp.value + healing.total, actor.system.attributes.hp.max) });
 
 ChatMessage.create({
@@ -59,6 +54,11 @@ ChatMessage.create({
 AURORA_DETAILS.duration--;
 
 if (AURORA_DETAILS.duration <= 0) {
+    const auroraItem = actor.items.find(i => i.name === 'Aurora');
+    if (!auroraItem.system.recharge.charged) {
+        auroraItem.rollRecharge();
+    }
+
     await actor.unsetFlag('world', 'Gunbreak:Aurora');
     game.dfreds.effectInterface.removeEffect({ effectName: 'Aurora', uuid: actor.uuid });
 } else {

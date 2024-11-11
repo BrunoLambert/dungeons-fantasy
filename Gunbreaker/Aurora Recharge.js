@@ -1,6 +1,7 @@
 // On start of combat turn
 const auroraItem = actor.items.find(i => i.name === 'Aurora');
-if (!auroraItem.system.recharge.charged) {
+const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied("Aurora", actor.uuid);
+if (!auroraItem.system.recharge.charged && !hasEffectApplied) {
     auroraItem.rollRecharge();
 }
 

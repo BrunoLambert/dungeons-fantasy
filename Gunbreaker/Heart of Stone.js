@@ -2,7 +2,6 @@ if (args[0] === 'on') {
     try {
         const sourceActor = game.actors.find(char => char.uuid === args[1].origin.split(".Item")[0]);
         const sourceActorUser = game.users.get(Object.keys(sourceActor.ownership).filter(key => !["Dq4GUDk42WtKambg", "default"].includes(key))[0])
-        console.log(sourceActor);
         const target = sourceActorUser.targets.first();
         if (!target) {
             throw new Error('You need to select a target first');

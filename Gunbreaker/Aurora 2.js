@@ -11,23 +11,43 @@ try {
     if (hasEffectApplied) {
         throw new Error('You already have an active Aurora effect');
     }
-    
-    const conMod = actor.system.abilities.con.mod;
-    const AURORA_DETAILS = {
-        healing: `1d8 + ${gunbladeUses} + ${conMod}`,
-        duration: actor.system.attributes.prof,
-        flag: 'Gunbreak:Aurora',
-        item: item.name
+
+    const applyAuroraEffect = async (charges) => {
+        const conMod = actor.system.abilities.con.mod;
+        const AURORA_DETAILS = {
+            healing: `1d8 + ${charges} + ${conMod}`,
+            duration: actor.system.attributes.prof,
+            flag: 'Gunbreak:Aurora',
+            item: item.name
+        }
+
+        await actor.setFlag('world', AURORA_DETAILS.flag, AURORA_DETAILS);
+
+        const effectData = game.dfreds.effectInterface.findEffectByName('Aurora').data.toObject();
+        effectData.description = effectData.description.replace('%hp', AURORA_DETAILS.healing)
+        effectData.description = effectData.description.replace('%r', AURORA_DETAILS.duration)
+        game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
+
+        gunblade.update({ "system.uses.value": Math.max(gunblade.system.uses.value - charges, 0) });
     }
 
-    await actor.setFlag('world', AURORA_DETAILS.flag, AURORA_DETAILS);
-
-    const effectData = game.dfreds.effectInterface.findEffectByName('Aurora').data.toObject();
-    effectData.description = effectData.description.replace('%hp', AURORA_DETAILS.healing)
-    effectData.description = effectData.description.replace('%r', AURORA_DETAILS.duration)
-    game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
-
-    gunblade.update({ "system.uses.value": 0 });
+    let buttons = {}
+    for (let index = 0; index < gunbladeUses; index++) {
+        buttons[`charge${index + 1}`] = {
+            label: `${index + 1} charges`,
+            callback: () => { applyAuroraEffect(index + 1) }
+        }
+    }
+    let auroraDialog = new Dialog({
+        title: "Aurora II",
+        content: `
+            <p>You have ${gunbladeUses} charges you may use on Aurora</p>
+            <b>
+                <p>Choose how may charges you want to use:</p>
+            </b>`,
+        buttons,
+    });
+    auroraDialog.render(true);
 } catch (err) {
     let errorDialog = new Dialog({
         title: "Aurora II",
