@@ -1,5 +1,8 @@
 
 const onUsingItem = async () => {
+    const summonedCreature = item.system.summons.summonedCreatures[0];
+    if (!summonedCreature) return;
+
     const EGI_NAMES = {
         ifrit: "Ifrit Egi",
         titan: "Titan Egi",
@@ -35,7 +38,7 @@ const onUsingItem = async () => {
             }
         })
 
-        const [spawnedEgi] = await warpgate.spawn(egiName, { token: { alpha: 0 } });
+        const spawnedEgi = summonedCreature.token;
 
         await new Sequence()
             .wait(200)
@@ -57,25 +60,7 @@ const onUsingItem = async () => {
         Hotbar.toggleDocumentSheet(actor.uuid)
     }
 
-    let egisBoonDialog = new Dialog({
-        title: "Egi's Boon",
-        content: `<p><b>Select what Egi you want to summon:</b></p><br/>`,
-        buttons: {
-            "Ifrit": {
-                label: "Ifrit",
-                callback: () => handleSelect(EGI_NAMES.ifrit)
-            },
-            "Titan": {
-                label: "Titan",
-                callback: () => handleSelect(EGI_NAMES.titan)
-            },
-            "Garuda": {
-                label: "Garuda",
-                callback: () => handleSelect(EGI_NAMES.garuda)
-            }
-        }
-    });
-    egisBoonDialog.render(true);
+    handleSelect(item.system.summons.summonedCreatures[0].name)
 }
 
 const onEffectDeletion = async () => {
