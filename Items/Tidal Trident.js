@@ -3,12 +3,12 @@ const applyDamageEffect = async (isEmpowered) => {
     const uuid = item.actor.uuid;
     const pb = item.actor.system.attributes.prof;
 
-    const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied(effectName, uuid);
+    const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName, uuid });
 
     if (!hasEffectApplied) {
-        const effectData = game.dfreds.effectInterface.findEffectByName(effectName).data.toObject();
+        const effectData = game.dfreds.effectInterface.findEffect({ effectName }).toObject();
         effectData.duration.seconds = pb * 6;
-        game.dfreds.effectInterface.addEffectWith({ effectData, uuid });
+        game.dfreds.effectInterface.addEffect({ effectData, uuid });
     }
 }
 

@@ -7,8 +7,8 @@ if (args[0] === 'on') {
             throw new Error('You need to select a target first');
         }
 
-        const hasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied('Aurora', sourceActor.uuid);
-        const targetHasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied('Aurora', target.actor.uuid);
+        const hasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: sourceActor.uuid });
+        const targetHasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: target.actor.uuid });
         const targetIsSelf = target.actor.uuid === sourceActor.uuid
 
         if (!targetIsSelf && hasAuroraEffect && !targetHasAuroraEffect) {
@@ -18,10 +18,10 @@ if (args[0] === 'on') {
 
             await target.actor.setFlag('world', AURORA_DETAILS.flag, AURORA_DETAILS);
 
-            const effectData = game.dfreds.effectInterface.findEffectByName('Aurora').data.toObject();
+            const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Aurora' }).toObject();
             effectData.description = effectData.description.replace('%hp', AURORA_DETAILS.healing)
             effectData.description = effectData.description.replace('%r', AURORA_DETAILS.duration)
-            game.dfreds.effectInterface.addEffectWith({ effectData, uuid: target.actor.uuid });
+            game.dfreds.effectInterface.addEffect({ effectData, uuid: target.actor.uuid });
         }
     } catch (err) {
         let errorDialog = new Dialog({

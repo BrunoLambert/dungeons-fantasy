@@ -16,11 +16,11 @@ try {
     const targetUuid = target.actor.uuid;
 
     const checkAndApplyEffect = async (effect) => {
-        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied(effect, targetUuid);
+        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: effect, uuid: targetUuid });
 
         if (!hasEffectApplied) {
-            const effectData = game.dfreds.effectInterface.findEffectByName(effect).data.toObject();
-            game.dfreds.effectInterface.addEffectWith({ effectData, uuid: targetUuid });
+            const effectData = game.dfreds.effectInterface.findEffect({ effectName: effect }).toObject();
+            game.dfreds.effectInterface.addEffect({ effectData, uuid: targetUuid });
         }
     }
 

@@ -23,19 +23,24 @@ try {
   }
 
   if (actives.system.uses.value >= actives.system.uses.max) {
-    throw new Error("You can't spawn more Noulith");
+    throw new Error("You can't spawn more Noulith"); z
   }
 
-  const [spawnedNoulith] = await warpgate.spawn("Noulith", { token: { alpha: 0, elevation: 1 } });
+  const characterToken = game.canvas.tokens.ownedTokens.find(ownedToken => (
+    ownedToken.actor.type === "character" && ownedToken.actor.uuid === game.user.character.uuid
+  ));
+  const portal = new Portal().origin(characterToken);
+  portal.addCreature("Noulith", { count: 1, updateData: { token: { elevation: 1, alpha: 0 } } });
+  const [summon] = await portal.range(60).spawn();
 
   const spawning = new Sequence()
     .wait(200)
     .effect()
     .file("jb2a.swirling_sparkles.01.blue")
-    .atLocation(spawnedNoulith)
+    .atLocation(summon)
     .wait(900)
     .animation()
-    .on(spawnedNoulith)
+    .on(summon)
     .opacity(1.0)
 
   await spawning.play();

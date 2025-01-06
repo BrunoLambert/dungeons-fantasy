@@ -7,7 +7,7 @@ try {
     if (!gunbladeUses) {
         throw new Error('You dont have a Cartridges Charges on your Gunblade');
     }
-    const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Aurora', actor.uuid);
+    const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: actor.uuid });
     if (hasEffectApplied) {
         throw new Error('You already have an active Aurora effect');
     }
@@ -23,10 +23,10 @@ try {
 
         await actor.setFlag('world', AURORA_DETAILS.flag, AURORA_DETAILS);
 
-        const effectData = game.dfreds.effectInterface.findEffectByName('Aurora').data.toObject();
+        const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Aurora' }).toObject();
         effectData.description = effectData.description.replace('%hp', AURORA_DETAILS.healing)
         effectData.description = effectData.description.replace('%r', AURORA_DETAILS.duration)
-        game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
+        game.dfreds.effectInterface.addEffect({ effectData, uuid: actor.uuid });
 
         gunblade.update({ "system.uses.value": Math.max(gunblade.system.uses.value - charges, 0) });
     }

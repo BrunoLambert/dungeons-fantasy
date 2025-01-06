@@ -2,7 +2,7 @@ const data = args[0];
 const castLevel = data.castData.castLevel;
 const hpIncrease = (castLevel - 1) * 5;
 
-const effectData = game.dfreds.effectInterface.findEffectByName('Aid Effect').data.toObject();
+const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Aid Effect' }).toObject();
 effectData.name = 'Aid';
 effectData.changes = effectData.changes.map(change => ({
     ...change,
@@ -12,5 +12,5 @@ effectData.description = effectData.description.replace('%h', hpIncrease);
 
 const targets = game.user.targets;
 targets.forEach(target => {
-    game.dfreds.effectInterface.addEffectWith({ effectData, uuid: target.actor.uuid });
+    game.dfreds.effectInterface.addEffect({ effectData, uuid: target.actor.uuid });
 })

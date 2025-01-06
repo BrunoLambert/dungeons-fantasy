@@ -11,25 +11,25 @@ if (targets.first().name === "Kerachole") {
 } else {
   const nouliths = targets.toObject().filter((target) => (target.name === "Noulith"))
   nouliths.forEach(async (target) => {
-    const noulithHp = target.actor.system.attributes.hp.value;
     tokenAttacher.detachAllElementsFromToken(target)
 
-    const [spawnedCreature] = await warpgate.spawnAt(characterToken.center, "Noulith", { token: { alpha: 0, elevation: 1 } });
-    const spawning = new Sequence()
-      .wait(200)
+    await new Sequence()
       .effect()
       .file("jb2a.swirling_sparkles.01.blue")
-      .atLocation(spawnedCreature)
-      .wait(200)
+      .atLocation(target)
+      .scaleToObject()
+      .elevation(1)
+      .wait(500)
       .animation()
-      .on(spawnedCreature)
-      .opacity(1.0)
-
-    await spawning.play();
-
-    let token = canvas.tokens.placeables.find(t => t.id === spawnedCreature);
-    token.actor.update({ "system.attributes.hp.value": noulithHp })
-
-    target.document.delete();
+      .on(target)
+      .moveTowards(characterToken.center, { ease: "linear", delay: 0, relativeToCenter: true })
+      .moveSpeed(2000)
+      .snapToGrid()
+      .wait(100)
+      .effect()
+      .file("jb2a.swirling_sparkles.01.blue")
+      .atLocation(target)
+      .scaleToObject()
+      .play();
   })
 }

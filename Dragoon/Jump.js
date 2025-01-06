@@ -1,24 +1,11 @@
 actor.sheet.close();
 
-let position = await warpgate.crosshairs.show({
-  size: 1,
-  tag: randomID(),
-  label: "Jump to",
-  drawOutline: true,
-  drawIcon: true
-}, {
-  show: async (crosshair) => {
-
-    new Sequence()
-      .effect()
-      .from(token)
-      .attachTo(crosshair)
-      .persist()
-      .opacity(0.5)
-      .play();
-
-  }
-})
+const newLocation = await new Portal()
+  .color(game.user.color.css)
+  .texture(game.user.character.prototypeToken.texture.src)
+  .origin(token)
+  .range(actor.system.attributes.movement.walk)
+  .pick()
 
 await new Sequence()
   .effect()
@@ -28,10 +15,11 @@ await new Sequence()
   .wait(100)
   .animation()
   .on(token)
-  .moveTowards(position, { ease: "linear", delay: 0, relativeToCenter: true })
-  .moveSpeed(2000)
+  .duration(1000)
+  .moveTowards(newLocation, { ease: "linear", delay: 0, relativeToCenter: true })
+  .moveSpeed(1000)
   .snapToGrid()
-  .wait(100)
+  .waitUntilFinished()
   .effect()
   .file("jb2a.impact.ground_crack.orange")
   .scale(3)

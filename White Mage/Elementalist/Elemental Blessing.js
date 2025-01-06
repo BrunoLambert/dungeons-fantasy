@@ -38,12 +38,12 @@ try {
         let copy_item = duplicate(targetItem.toObject(false));
 
         const checkAndApplyEffect = async (effect) => {
-            const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied(effect, uuid);
+            const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: effect, uuid });
 
             if (!hasEffectApplied) {
-                const effectData = game.dfreds.effectInterface.findEffectByName(effect).data.toObject();
+                const effectData = game.dfreds.effectInterface.findEffect({ effectName: effect }).data.toObject();
                 effectData.duration.seconds = mod * 6;
-                game.dfreds.effectInterface.addEffectWith({ effectData, uuid });
+                game.dfreds.effectInterface.addEffect({ effectData, uuid });
             }
         }
 

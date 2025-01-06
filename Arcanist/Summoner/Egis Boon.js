@@ -28,9 +28,9 @@ const onUsingItem = async () => {
         actor.sheet.close();
 
         const hasEffectApplied = {
-            [EGI_NAMES.ifrit]: await game.dfreds.effectInterface.hasEffectApplied(effects[EGI_NAMES.ifrit], actor.uuid),
-            [EGI_NAMES.titan]: await game.dfreds.effectInterface.hasEffectApplied(effects[EGI_NAMES.titan], actor.uuid),
-            [EGI_NAMES.garuda]: await game.dfreds.effectInterface.hasEffectApplied(effects[EGI_NAMES.garuda], actor.uuid),
+            [EGI_NAMES.ifrit]: await game.dfreds.effectInterface.hasEffectApplied({ effectName: effects[EGI_NAMES.ifrit], uuid: actor.uuid }),
+            [EGI_NAMES.titan]: await game.dfreds.effectInterface.hasEffectApplied({ effectName: effects[EGI_NAMES.titan], uuid: actor.uuid }),
+            [EGI_NAMES.garuda]: await game.dfreds.effectInterface.hasEffectApplied({ effectName: effects[EGI_NAMES.garuda], uuid: actor.uuid }),
         }
         Object.keys(hasEffectApplied).forEach(key => {
             if (hasEffectApplied[key]) {

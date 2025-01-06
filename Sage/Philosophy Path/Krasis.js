@@ -16,7 +16,7 @@ const onItemUse = () => {
         { x: creatureToken.x, y: creatureToken.y + gridOffset },
         { x: creatureToken.x + gridOffset, y: creatureToken.y + gridOffset }
       ]
-      const noulithEffectData = game.dfreds.effectInterface.findEffectByName('Krasis').data.toObject();
+      const noulithEffectData = game.dfreds.effectInterface.findEffect({ effectName: 'Krasis' }).toObject();
       noulithEffectData.description = "Working on Krasis Technique";
 
       targets.forEach(async (target, targetIndex) => {
@@ -26,7 +26,7 @@ const onItemUse = () => {
           .moveTowards(noulithToGoPositions[targetIndex])
           .moveSpeed(500)
         await movingToken.play();
-        game.dfreds.effectInterface.addEffectWith({ effectData: noulithEffectData, uuid: target.actor.uuid });
+        game.dfreds.effectInterface.addEffect({ effectData: noulithEffectData, uuid: target.actor.uuid });
         target.actor.setFlag('world', 'Krasis', { targetUuid: creatureToken.actor.uuid });
       });
 

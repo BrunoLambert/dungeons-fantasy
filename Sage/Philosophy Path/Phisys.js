@@ -1,6 +1,6 @@
 const onUsingItem = () => {
   try {
-    const effectData = game.dfreds.effectInterface.findEffectByName('Physis').data.toObject();
+    const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Physis' }).toObject();
 
     if (item.name.search("Eukrasian") >= 0) {
       effectData.name = `Eukrasian ${effectData.name}`;
@@ -34,7 +34,7 @@ const onUsingItem = () => {
             .moveTowards(noulithToGoPositions[index])
             .moveSpeed(500)
           await movingToken.play();
-          game.dfreds.effectInterface.addEffectWith({ effectData, uuid: tokensToMove[index].actor.uuid });
+          game.dfreds.effectInterface.addEffect({ effectData, uuid: tokensToMove[index].actor.uuid });
           tokensToMove[index].actor.setFlag('world', 'Physis', { targetUuid: destinationToken.id });
         }
 

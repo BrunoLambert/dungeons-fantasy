@@ -10,7 +10,7 @@ const onUseItem = async () => {
     await game.dfreds.effectInterface.removeEffect({ effectName: "Zoe", uuid: zoeNoulith.actor.uuid });
   })
 
-  const effectData = game.dfreds.effectInterface.findEffectByName('Zoe').data.toObject();
+  const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Zoe' }).toObject();
   effectData.description = effectData.description.replace("%m", `+${intMod}`);
   const maxNoulithsToSend = Math.max(Math.min(intMod, 4), 1);
 
@@ -23,7 +23,7 @@ const onUseItem = async () => {
   ]
 
   targets.filter((target) => (target.name === "Noulith")).toObject().slice(0, maxNoulithsToSend).forEach(async (target, targetIndex) => {
-    game.dfreds.effectInterface.addEffectWith({ effectData, uuid: target.actor.uuid });
+    game.dfreds.effectInterface.addEffect({ effectData, uuid: target.actor.uuid });
     target.actor.setFlag('world', 'Zoe', true);
     const movingToken = new Sequence()
       .animation()
@@ -35,7 +35,7 @@ const onUseItem = async () => {
   })
 
   effectData.description = `Zoe Technique is amplifying the healing by ${intMod * targets.size}`
-  game.dfreds.effectInterface.addEffectWith({ effectData, uuid: actor.uuid });
+  game.dfreds.effectInterface.addEffect({ effectData, uuid: actor.uuid });
   setTimeout(() => {
     tokenAttacher.attachElementsToToken(targets, token)
   }, 2000);
