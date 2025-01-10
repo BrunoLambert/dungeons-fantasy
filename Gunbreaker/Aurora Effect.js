@@ -31,7 +31,7 @@ const boxStyleFinal = `
     font-weight: bold;
     color: var(--attribute-bar-primary-color);
 `
-const isMaxHealing = actor.flags["midi-qol"].max.damage.heal;
+const isMaxHealing = actor.flags["midi-qol"]?.max?.damage?.heal;
 const healing = await new Roll(AURORA_DETAILS.healing).evaluate({ maximize: isMaxHealing });
 actor.update({ 'system.attributes.hp.value': Math.min(actor.system.attributes.hp.value + healing.total, actor.system.attributes.hp.max) });
 

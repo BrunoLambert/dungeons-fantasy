@@ -7,10 +7,6 @@ try {
     if (!gunbladeUses) {
         throw new Error('You dont have a Cartridges Charges on your Gunblade');
     }
-    const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: actor.uuid });
-    if (hasEffectApplied) {
-        throw new Error('You already have an active Aurora effect');
-    }
 
     const applyAuroraEffect = async (charges) => {
         const conMod = actor.system.abilities.con.mod;

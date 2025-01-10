@@ -7,20 +7,18 @@ if (args[0] === 'on') {
             throw new Error('You need to select a target first');
         }
 
-        const hasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: sourceActor.uuid });
-        const targetHasAuroraEffect = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Aurora', uuid: target.actor.uuid });
-        const targetIsSelf = target.actor.uuid === sourceActor.uuid
+        const targetIsSelf = target.actor.uuid === sourceActor.uuid;
+        let SOURCE_AURORA_DETAILS = sourceActor.getFlag('world', 'Gunbreak:Aurora');
 
-        if (!targetIsSelf && hasAuroraEffect && !targetHasAuroraEffect) {
-            let AURORA_DETAILS = sourceActor.getFlag('world', 'Gunbreak:Aurora')
-            AURORA_DETAILS.duration = 2
-            AURORA_DETAILS.item = item.name
+        if (SOURCE_AURORA_DETAILS && !targetIsSelf) {
+            SOURCE_AURORA_DETAILS.duration = 2;
+            SOURCE_AURORA_DETAILS.item = item.name;
 
-            await target.actor.setFlag('world', AURORA_DETAILS.flag, AURORA_DETAILS);
+            await target.actor.setFlag('world', SOURCE_AURORA_DETAILS.flag, SOURCE_AURORA_DETAILS);
 
             const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Aurora' }).toObject();
-            effectData.description = effectData.description.replace('%hp', AURORA_DETAILS.healing)
-            effectData.description = effectData.description.replace('%r', AURORA_DETAILS.duration)
+            effectData.description = effectData.description.replace('%hp', SOURCE_AURORA_DETAILS.healing);
+            effectData.description = effectData.description.replace('%r', SOURCE_AURORA_DETAILS.duration);
             game.dfreds.effectInterface.addEffect({ effectData, uuid: target.actor.uuid });
         }
     } catch (err) {
