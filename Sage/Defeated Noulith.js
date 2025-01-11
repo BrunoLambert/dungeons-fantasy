@@ -1,10 +1,5 @@
 // On effect deletion of Operation
 const onOpratingEffectDeletion = async () => {
-  const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Inactive Noulith', uuid: actor.uuid });
-  if (!hasEffectApplied) {
-    await game.dfreds.effectInterface.addEffect({ effectName: 'Inactive Noulith', uuid: actor.uuid });
-  }
-
   const character = game.user.character;
   const brokens = character.items.find(item => item.name === "Broken Nouliths");
   const inactives = character.items.find(item => item.name === "Inactive Nouliths");

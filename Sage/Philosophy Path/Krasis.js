@@ -27,7 +27,7 @@ const onItemUse = () => {
           .moveSpeed(500)
         await movingToken.play();
         game.dfreds.effectInterface.addEffect({ effectData: noulithEffectData, uuid: target.actor.uuid });
-        target.actor.setFlag('world', 'Krasis', { targetUuid: creatureToken.actor.uuid });
+        target.actor.setFlag('world', 'Krasis', { targetUuid: creatureToken.actor.uuid, value: actor.system.attributes.prof });
       });
 
       game.dfreds.effectInterface.addEffect({ effectName: 'Krasis', uuid: creatureToken.actor.uuid });

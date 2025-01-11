@@ -10,7 +10,7 @@ const onUseItem = async () => {
     effectData.description = effectData.description.replace("1d4", `${amountNoulith}d4`);
     effectData.changes = effectData.changes.map(change => {
       if (change.key !== "system.traits.dm.midi.all") return change;
-      return { ...change, value: `- (floor(random() * ${amountNoulith * 4}) + 1)` };
+      return { ...change, value: `- (floor(random() * ${amountNoulith * 4}) + ${amountNoulith})` };
     })
 
     const spawnedKerachole = item.system.summons.summonedCreatures[0];
@@ -102,7 +102,10 @@ const onReacall = async () => {
         .wait(900)
         .animation()
         .on(summon)
-        .opacity(1.0)
+        .opacity(1)
+        .thenDo(async () => {
+          await summon.update({ elevation: 1 })
+        })
 
       await spawning.play();
     })
@@ -123,7 +126,7 @@ const onReacall = async () => {
       effectData.description = effectData.description.replace("1d4", `${amountNoulith}d4`);
       effectData.changes = effectData.changes.map(change => {
         if (change.key !== "system.traits.dm.midi.all") return change;
-        return { ...change, value: `- (floor(random() * ${amountNoulith * 4}) + 1)` };
+        return { ...change, value: `- (floor(random() * ${amountNoulith * 4}) + ${amountNoulith})` };
       })
 
       const recalleds = keracholeData.slice(0, amount)

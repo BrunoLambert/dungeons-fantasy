@@ -42,6 +42,10 @@ try {
     .animation()
     .on(summon)
     .opacity(1.0)
+    .wait(50)
+    .thenDo(async () => {
+      await summon.update({ elevation: 1 })
+    })
 
   await spawning.play();
 

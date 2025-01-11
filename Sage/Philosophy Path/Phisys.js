@@ -1,6 +1,7 @@
 const onUsingItem = () => {
   try {
     const effectData = game.dfreds.effectInterface.findEffect({ effectName: 'Physis' }).toObject();
+    console.log(item.name);
 
     if (item.name.search("Eukrasian") >= 0) {
       effectData.name = `Eukrasian ${effectData.name}`;
@@ -133,24 +134,31 @@ const onEffectCreation = async () => {
 
 const activeHealingEffect = () => {
   try {
-    const handleTargetingMode = () => {
+    const handleEffectAndItemActivation = async (targets = []) => {
+      for (let index = 0; index < targets.length; index++) {
+        const physisItem = targets[index].actor.items.find(item => item.name.search('Physis Healing') >= 0);
+        physisItem.use();
+        await new Sequence()
+          .effect()
+          .file("jb2a.healing_generic.200px.blue")
+          .tint(0x0000FF)
+          .atLocation(targets[index])
+          .waitUntilFinished()
+          .play();
+      }
+    }
+
+    const handleTargetingMode = async () => {
       const targets = game.user.targets.toObject().filter(target => target.name === "Noulith");
       if (!targets && targets.length < 1) {
         throw new Error('You need, at least, one target');
       }
-
-      targets.forEach(target => {
-        const physisIcon = target.actor.items.find(item => item.name.search('Physis Healing') >= 0);
-        physisIcon.use();
-      });
+      await handleEffectAndItemActivation(targets);
     }
 
-    const handleAutomaticMode = () => {
+    const handleAutomaticMode = async () => {
       const physisNoulithTokens = game.canvas.tokens.ownedTokens.filter((token) => (token.name === 'Noulith') && !!token.actor.getFlag('world', 'Physis'));
-      physisNoulithTokens.forEach(physisNoulithToken => {
-        const physisIcon = physisNoulithToken.actor.items.find(item => item.name.search('Physis Healing') >= 0);
-        physisIcon.use();
-      });
+      await handleEffectAndItemActivation(physisNoulithTokens);
     }
 
     let physisDialog = new Dialog({

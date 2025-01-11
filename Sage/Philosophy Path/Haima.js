@@ -20,7 +20,7 @@ const onItemUse = async (item) => {
     if (isntAllNouliths || targets.length < 4) throw new Error("You need valid targets (4 Nouliths)");
 
     // Handle New Targeting
-    const handleEffectDestination = () => {
+    const handleEffectDestination = async () => {
       const creatureToken = game.user.targets.first();
       if (!creatureToken || creatureToken.name === "Noulith") throw new Error("Invalid target of Haima");
 
@@ -31,21 +31,20 @@ const onItemUse = async (item) => {
         { x: creatureToken.x, y: creatureToken.y + gridOffset },
         { x: creatureToken.x + gridOffset, y: creatureToken.y + gridOffset }
       ]
-      targets.forEach(async (target, targetIndex) => {
+      for (let index = 0; index < targets.length; index++) {
         const movingToken = new Sequence()
           .animation()
-          .on(target)
-          .moveTowards(noulithToGoPositions[targetIndex])
+          .on(targets[index])
+          .moveTowards(noulithToGoPositions[index])
           .moveSpeed(500)
+          .waitUntilFinished()
         await movingToken.play();
-        game.dfreds.effectInterface.addEffect({ effectName: 'Haima', uuid: target.actor.uuid });
-      });
+        await game.dfreds.effectInterface.addEffect({ effectName: 'Haima', uuid: targets[index].actor.uuid });
+      }
 
       game.dfreds.effectInterface.addEffect({ effectName: 'Haima', uuid: creatureToken.actor.uuid });
-      setTimeout(() => {
-        tokenAttacher.attachElementsToToken(targets, creatureToken)
-      }, 2000);
-      item.update({ name: "Recall Haima" })
+      await tokenAttacher.attachElementsToToken(targets, creatureToken)
+      await item.update({ name: "Recall Haima" })
       actor.setFlag('world', 'Haima', { nouliths: targets.map(target => target.id), target: creatureToken.id });
     }
 
